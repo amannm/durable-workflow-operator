@@ -4,9 +4,9 @@ import dev.restate.sdk.WorkflowContext;
 import dev.restate.sdk.annotation.Workflow;
 import dev.restate.sdk.endpoint.Endpoint;
 import dev.restate.sdk.http.vertx.RestateHttpServer;
-import io.serverlessworkflow.api.Workflow;
-import io.serverlessworkflow.api.deserializers.WorkflowParser;
-import io.serverlessworkflow.api.states.State;
+import com.example.workflow.operator.model.ServerlessWorkflow;
+import com.example.workflow.operator.model.ServerlessWorkflowParser;
+import com.example.workflow.operator.model.ServerlessState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,9 +15,9 @@ public class WorkflowRunner {
 
     public void run(String definition) {
         try {
-            Workflow workflow = WorkflowParser.parse(definition);
-            log.info("Parsed workflow: {} - version {}", workflow.getId(), workflow.getVersion());
-            Endpoint endpoint = Endpoint.bind(new ServerlessWorkflowService(workflow)).build();
+            ServerlessWorkflow serverlessWorkflow = ServerlessWorkflowParser.parse(definition);
+            log.info("Parsed workflow: {} - version {}", serverlessWorkflow.getId(), serverlessWorkflow.getVersion());
+            Endpoint endpoint = Endpoint.bind(new ServerlessWorkflowService(serverlessWorkflow)).build();
             RestateHttpServer.listen(endpoint);
         } catch (Exception e) {
             log.error("Failed to parse workflow", e);
@@ -30,15 +30,15 @@ public class WorkflowRunner {
      * Restate can be used together with the Serverless Workflow parser.
      */
     static class ServerlessWorkflowService {
-        private final Workflow workflow;
+        private final ServerlessWorkflow serverlessWorkflow;
 
-        ServerlessWorkflowService(Workflow workflow) {
-            this.workflow = workflow;
+        ServerlessWorkflowService(ServerlessWorkflow serverlessWorkflow) {
+            this.serverlessWorkflow = serverlessWorkflow;
         }
 
-        @Workflow
+        @dev.restate.sdk.annotation.Workflow
         public String run(WorkflowContext ctx) {
-            for (State state : workflow.getStates()) {
+            for (ServerlessState state : serverlessWorkflow.getStates()) {
                 String name = state.getName();
                 ctx.run(name, () -> log.info("Executing state {}", name));
             }
