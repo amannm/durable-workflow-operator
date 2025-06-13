@@ -3,6 +3,7 @@ package com.example.workflow.operator.api;
 import com.example.workflow.operator.Workflow;
 import com.example.workflow.operator.WorkflowResourceSpec;
 import com.example.workflow.operator.model.ServerlessWorkflow;
+import com.example.workflow.operator.model.WorkflowParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
@@ -34,12 +35,16 @@ public class WorkflowServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String json = new String(req.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        String body = new String(req.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
         ServerlessWorkflow definition;
         try {
-            definition = MAPPER.readValue(json, ServerlessWorkflow.class);
-        } catch (JsonProcessingException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid workflow JSON");
+            if (req.getContentType() != null && req.getContentType().toLowerCase().contains("yaml")) {
+                definition = WorkflowParser.parseYaml(body);
+            } else {
+                definition = MAPPER.readValue(body, ServerlessWorkflow.class);
+            }
+        } catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid workflow definition");
             return;
         }
         Workflow wf = new Workflow();

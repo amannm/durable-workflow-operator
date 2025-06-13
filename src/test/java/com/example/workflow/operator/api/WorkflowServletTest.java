@@ -72,4 +72,34 @@ public class WorkflowServletTest {
         assertEquals("test", created.getSpec().getDefinition().getId());
         assertEquals("1.0", created.getSpec().getDefinition().getVersion());
     }
+
+    @Test
+    void createsWorkflowResourceFromYaml() throws Exception {
+        KubernetesClient client = Mockito.mock(KubernetesClient.class);
+        var op = Mockito.mock(MixedOperation.class);
+        Resource<Workflow> resource = Mockito.mock(Resource.class);
+        Mockito.when(client.resources(Workflow.class)).thenReturn(op);
+        Mockito.when(op.inNamespace("default")).thenReturn(op);
+        ArgumentCaptor<Workflow> captor = ArgumentCaptor.forClass(Workflow.class);
+        Mockito.when(op.resource(captor.capture())).thenReturn(resource);
+
+        WorkflowServlet servlet = new WorkflowServlet(client);
+
+        HttpServletRequest req = Mockito.mock(HttpServletRequest.class);
+        HttpServletResponse resp = Mockito.mock(HttpServletResponse.class);
+        String yaml = java.nio.file.Files.readString(java.nio.file.Path.of("src/test/resources/workflows/sample.yaml"));
+        ByteArrayInputStream in = new ByteArrayInputStream(yaml.getBytes(StandardCharsets.UTF_8));
+        Mockito.when(req.getInputStream()).thenReturn(new SimpleServletInputStream(in));
+        Mockito.when(req.getContentType()).thenReturn("application/yaml");
+        StringWriter responseWriter = new StringWriter();
+        Mockito.when(resp.getWriter()).thenReturn(new PrintWriter(responseWriter));
+
+        servlet.doPost(req, resp);
+
+        Mockito.verify(resource).create();
+        Workflow created = captor.getValue();
+        assertNotNull(created.getSpec().getDefinition());
+        assertEquals("switch-example", created.getSpec().getDefinition().getId());
+        assertEquals("0.1.0", created.getSpec().getDefinition().getVersion());
+    }
 }
