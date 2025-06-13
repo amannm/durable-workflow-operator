@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         log.info("Starting Durable Workflow Operator");
         try (DefaultKubernetesClient client = new DefaultKubernetesClient(Config.autoConfigure(null))) {
-            Operator operator = new Operator(client);
+            Operator operator = new Operator();
             operator.register(new WorkflowReconciler());
             WorkflowApiServer apiServer = new WorkflowApiServer(client);
             apiServer.start();

@@ -25,7 +25,7 @@ public class WorkflowReconciler implements Reconciler<Workflow> {
             WorkflowStatus status = new WorkflowStatus();
             status.setPhase("Deployed");
             resource.setStatus(status);
-            return UpdateControl.updateStatus(resource);
+            return UpdateControl.patchStatus(resource);
         }
         return UpdateControl.noUpdate();
     }

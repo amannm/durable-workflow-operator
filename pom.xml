@@ -16,29 +16,8 @@
       <artifactId>operator-framework</artifactId>
       <version>5.1.1</version>
     </dependency>
-    <!-- Serverless Workflow specification -->
-    <dependency>
-      <groupId>io.serverlessworkflow</groupId>
-      <artifactId>serverlessworkflow-util</artifactId>
-      <version>5.2.0.Final</version>
-    </dependency>
-    <dependency>
-      <groupId>io.serverlessworkflow</groupId>
-      <artifactId>serverlessworkflow-api</artifactId>
-      <version>7.1.0.Final</version>
-    </dependency>
-    <!-- Restate SDK core -->
-    <dependency>
-      <groupId>dev.restate</groupId>
-      <artifactId>sdk-core</artifactId>
-      <version>2.1.1</version>
-    </dependency>
-    <!-- Restate HTTP server -->
-    <dependency>
-      <groupId>dev.restate</groupId>
-      <artifactId>sdk-java-http</artifactId>
-      <version>2.1.1</version>
-    </dependency>
+    <!-- Simple Serverless Workflow model (internal implementation) -->
+    <!-- Restate SDK (stubbed for demonstration) -->
     <!-- JSON parsing -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -74,6 +53,37 @@
 
   <build>
     <plugins>
+      <!-- Define plugin versions explicitly to avoid network downloads -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.2.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.10.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.3.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>3.1.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.1.1</version>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
