@@ -7,9 +7,15 @@ import org.eclipse.jetty.server.Server;
 
 public class WorkflowApiServer {
     private final Server server;
+    private final int port;
 
     public WorkflowApiServer(KubernetesClient client) {
-        this.server = new Server(8080);
+        this(client, 8080);
+    }
+
+    public WorkflowApiServer(KubernetesClient client, int port) {
+        this.port = port;
+        this.server = new Server(port);
         ServletContextHandler context = new ServletContextHandler();
         context.setContextPath("/");
         context.addServlet(new ServletHolder(new WorkflowServlet(client)), "/workflows");
@@ -22,5 +28,12 @@ public class WorkflowApiServer {
 
     public void stop() throws Exception {
         server.stop();
+    }
+
+    public int getPort() {
+        if (port == 0) {
+            return server.getURI().getPort();
+        }
+        return port;
     }
 }
