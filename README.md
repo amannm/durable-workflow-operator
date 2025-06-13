@@ -15,7 +15,7 @@ An embedded Jetty server exposes an HTTP endpoint on port `8080`. Posting a work
 This is a standard Maven project. To build it, run:
 
 ```bash
-mvn package
+./mvnw clean install
 ```
 
 This will download all dependencies and create a runnable jar in the `target` directory.
