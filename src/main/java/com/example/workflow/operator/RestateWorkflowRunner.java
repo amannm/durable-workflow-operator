@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
 public class RestateWorkflowRunner {
     private static final Logger log = LoggerFactory.getLogger(RestateWorkflowRunner.class);
 
-    public void run(String definition) {
+    public void run(ServerlessWorkflow definition) {
         startService(definition);
     }
 
-    ServerlessWorkflowService startService(String definition) {
+    ServerlessWorkflowService startService(ServerlessWorkflow definition) {
         try {
             throw new UnsupportedOperationException("TODO");
         } catch (Exception e) {

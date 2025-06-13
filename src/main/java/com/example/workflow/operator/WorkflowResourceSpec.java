@@ -1,13 +1,15 @@
 package com.example.workflow.operator;
 
-public class WorkflowResourceSpec {
-    private String definition;
+import com.example.workflow.operator.model.ServerlessWorkflow;
 
-    public String getDefinition() {
+public class WorkflowResourceSpec {
+    private ServerlessWorkflow definition;
+
+    public ServerlessWorkflow getDefinition() {
         return definition;
     }
 
-    public void setDefinition(String definition) {
+    public void setDefinition(ServerlessWorkflow definition) {
         this.definition = definition;
     }
 }
