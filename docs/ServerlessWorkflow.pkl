@@ -1,0 +1,1603 @@
+/// Serverless Workflow DSL - Workflow Schema.
+///
+/// This module was generated from JSON Schema from
+/// <file:///Users/amannmalik/IdeaProjects/durable-workflow-operator/docs/serverlessworkflow.json>.
+///
+/// WARN: The root schema describes open-ended properties, but this is not possible to describe at the
+/// module level.
+module Serverlessworkflow
+
+/// Document
+///
+/// Documents the workflow.
+document: Document
+
+/// Input
+///
+/// Configures the workflow's input.
+input: Input?
+
+/// Use
+///
+/// Defines the workflow's reusable components.
+use: Use?
+
+/// Do
+///
+/// Defines the task(s) the workflow must perform.
+do: TaskList
+
+/// DoTimeout
+timeout: (Timeout|String)?
+
+/// Output
+///
+/// Configures the workflow's output.
+output: Output?
+
+/// Schedule
+///
+/// Schedules the workflow.
+schedule: Schedule?
+
+/// Document
+///
+/// Documents the workflow.
+class Document {
+  /// WorkflowDSL
+  ///
+  /// The version of the DSL used by the workflow.
+  dsl: String(matches(Regex(#"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"#)))
+
+  /// WorkflowNamespace
+  ///
+  /// The workflow's namespace.
+  namespace: String(matches(Regex("^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$")))
+
+  /// WorkflowName
+  ///
+  /// The workflow's name.
+  name: String(matches(Regex("^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$")))
+
+  /// WorkflowVersion
+  ///
+  /// The workflow's semantic version.
+  version: String(matches(Regex(#"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"#)))
+
+  /// WorkflowTitle
+  ///
+  /// The workflow's title.
+  title: String?
+
+  /// WorkflowSummary
+  ///
+  /// The workflow's Markdown summary.
+  summary: String?
+
+  /// WorkflowTags
+  ///
+  /// A key/value mapping of the workflow's tags, if any.
+  tags: Mapping<String, Any>?
+
+  /// WorkflowMetadata
+  ///
+  /// Holds additional information about the workflow.
+  metadata: Mapping<String, Any>?
+}
+
+/// Use
+///
+/// Defines the workflow's reusable components.
+class Use {
+  /// UseAuthentications
+  ///
+  /// The workflow's reusable authentication policies.
+  authentications: Mapping<String, AuthenticationPolicy>?
+
+  /// UseErrors
+  ///
+  /// The workflow's reusable errors.
+  errors: Mapping<String, Error>?
+
+  /// UseExtensions
+  ///
+  /// The workflow's extensions.
+  extensions: Listing<Mapping<String, Extension>(length.isBetween(1, 1))>?
+
+  /// UseFunctions
+  ///
+  /// The workflow's reusable functions.
+  functions: Mapping<String, Task>?
+
+  /// UseRetries
+  ///
+  /// The workflow's reusable retry policies.
+  retries: Mapping<String, RetryPolicy>?
+
+  /// UseSecrets
+  ///
+  /// The workflow's reusable secrets.
+  secrets: Listing<String>?
+
+  /// UseTimeouts
+  ///
+  /// The workflow's reusable timeouts.
+  timeouts: Mapping<String, Timeout>?
+
+  /// UseCatalogs
+  ///
+  /// The workflow's reusable catalogs.
+  catalogs: Mapping<String, Catalog>?
+}
+
+/// Schedule
+///
+/// Schedules the workflow.
+class Schedule {
+  /// ScheduleEvery
+  ///
+  /// Specifies the duration of the interval at which the workflow should be executed.
+  every: Duration?
+
+  /// ScheduleCron
+  ///
+  /// Specifies the schedule using a cron expression, e.g., '0 0 * * *' for daily at midnight.
+  cron: String?
+
+  /// ScheduleAfter
+  ///
+  /// Specifies a delay duration that the workflow must wait before starting again after it completes.
+  after: Duration?
+
+  /// ScheduleOn
+  ///
+  /// Specifies the events that trigger the workflow execution.
+  on: EventConsumptionStrategy?
+}
+
+/// TaskBase
+///
+/// An object inherited by all tasks.
+class TaskBase {
+  /// TaskBaseIf
+  ///
+  /// A runtime expression, if any, used to determine whether or not the task should be run.
+  `if`: String?
+
+  /// TaskBaseInput
+  ///
+  /// Configure the task's input.
+  input: Input?
+
+  /// TaskBaseOutput
+  ///
+  /// Configure the task's output.
+  output: Output?
+
+  /// TaskBaseExport
+  ///
+  /// Export task output to context.
+  export: Export?
+
+  /// TaskTimeout
+  timeout: (Timeout|String)?
+
+  /// TaskBaseThen
+  ///
+  /// The flow directive to be performed upon completion of the task.
+  then: FlowDirective?
+
+  /// TaskMetadata
+  ///
+  /// Holds additional information about the task.
+  metadata: Mapping<String, Any>?
+}
+
+/// AsyncApiArguments
+///
+/// The Async API call arguments.
+class With {
+  /// AsyncAPIDocument
+  ///
+  /// The document that defines the AsyncAPI operation to call.
+  document: ExternalResource?
+
+  /// With
+  ///
+  /// The name of the channel on which to perform the operation. Used only in case the referenced
+  /// document uses AsyncAPI v2.6.0.
+  channel: String?
+
+  /// AsyncAPIOperation
+  ///
+  /// A reference to the AsyncAPI operation to call.
+  operation: String?
+
+  /// AsyncAPIServer
+  ///
+  /// An object used to configure to the server to call the specified AsyncAPI operation on.
+  server: AsyncApiServer?
+
+  /// AsyncApiProtocol
+  ///
+  /// The protocol to use to select the target server.
+  protocol: (
+    "amqp"
+    |"amqp1"
+    |"anypointmq"
+    |"googlepubsub"
+    |"http"
+    |"ibmmq"
+    |"jms"
+    |"kafka"
+    |"mercure"
+    |"mqtt"
+    |"mqtt5"
+    |"nats"
+    |"pulsar"
+    |"redis"
+    |"sns"
+    |"solace"
+    |"sqs"
+    |"stomp"
+    |"ws")?
+
+  /// AsyncApiMessage
+  ///
+  /// An object used to configure the message to publish using the target operation.
+  message: AsyncApiOutboundMessage?
+
+  /// AsyncApiSubscription
+  ///
+  /// An object used to configure the subscription to messages consumed using the target operation.
+  subscription: AsyncApiSubscription?
+
+  /// AsyncAPIAuthentication
+  ///
+  /// The authentication policy, if any, to use when calling the AsyncAPI operation.
+  authentication: ReferenceableAuthenticationPolicy?
+}
+
+/// GRPCArguments
+///
+/// The GRPC call arguments.
+class CallTaskAlternate1With {
+  /// WithGRPCProto
+  ///
+  /// The proto resource that describes the GRPC service to call.
+  proto: ExternalResource
+
+  /// WithGRPCService
+  service: Service
+
+  /// WithGRPCMethod
+  ///
+  /// The name of the method to call on the defined GRPC service.
+  method: String
+
+  /// WithGRPCArguments
+  ///
+  /// The arguments, if any, to call the method with.
+  arguments: Mapping<String, Any>?
+}
+
+/// WithGRPCService
+class Service {
+  /// WithGRPCServiceName
+  ///
+  /// The name of the GRPC service to call.
+  name: String
+
+  /// WithGRPCServiceHost
+  ///
+  /// The hostname of the GRPC service to call.
+  host: String(matches(Regex("^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$")))
+
+  /// WithGRPCServicePost
+  ///
+  /// The port number of the GRPC service to call.
+  port: UInt16?
+
+  /// WithGRPCServiceAuthentication
+  ///
+  /// The endpoint's authentication policy, if any.
+  authentication: ReferenceableAuthenticationPolicy?
+}
+
+/// HTTPArguments
+///
+/// The HTTP call arguments.
+class CallTaskAlternate2With {
+  /// HTTPMethod
+  ///
+  /// The HTTP method of the HTTP request to perform.
+  method: String
+
+  /// HTTPEndpoint
+  ///
+  /// The HTTP endpoint to send the request to.
+  endpoint: Endpoint
+
+  /// HTTPHeaders
+  ///
+  /// A name/value mapping of the headers, if any, of the HTTP request to perform.
+  headers: Dynamic?
+
+  /// HTTPBody
+  ///
+  /// The body, if any, of the HTTP request to perform.
+  body: Any?
+
+  /// HTTPQuery
+  ///
+  /// A name/value mapping of the query parameters, if any, of the HTTP request to perform.
+  query: Mapping<String, Any>?
+
+  /// HTTPOutput
+  ///
+  /// The http call output format. Defaults to 'content'.
+  output: ("raw"|"content"|"response")?
+
+  /// HttpRedirect
+  ///
+  /// Specifies whether redirection status codes (`300–399`) should be treated as errors.
+  redirect: Boolean?
+}
+
+/// OpenAPIArguments
+///
+/// The OpenAPI call arguments.
+class CallTaskAlternate3With {
+  /// WithOpenAPIDocument
+  ///
+  /// The document that defines the OpenAPI operation to call.
+  document: ExternalResource
+
+  /// WithOpenAPIOperation
+  ///
+  /// The id of the OpenAPI operation to call.
+  operationId: String
+
+  /// WithOpenAPIParameters
+  ///
+  /// A name/value mapping of the parameters of the OpenAPI operation to call.
+  parameters: Mapping<String, Any>?
+
+  /// WithOpenAPIAuthentication
+  ///
+  /// The authentication policy, if any, to use when calling the OpenAPI operation.
+  authentication: ReferenceableAuthenticationPolicy?
+
+  /// WithOpenAPIOutput
+  ///
+  /// The http call output format. Defaults to 'content'.
+  output: ("raw"|"content"|"response")?
+
+  /// HttpRedirect
+  ///
+  /// Specifies whether redirection status codes (`300–399`) should be treated as errors.
+  redirect: Boolean?
+}
+
+/// ForkTaskConfiguration
+///
+/// The configuration of the branches to perform concurrently.
+class Fork {
+  /// ForkBranches
+  branches: TaskList
+
+  /// ForkCompete
+  ///
+  /// Indicates whether or not the concurrent tasks are racing against each other, with a single possible
+  /// winner, which sets the composite task's output.
+  ///
+  /// Default if undefined: `false`
+  compete: Boolean?
+}
+
+/// EmitTaskConfiguration
+///
+/// The configuration of an event's emission.
+class Emit {
+  /// EmitEventDefinition
+  ///
+  /// The definition of the event to emit.
+  event: Event
+}
+
+/// EmitEventDefinition
+///
+/// The definition of the event to emit.
+class Event {
+  /// EmitEventWith
+  ///
+  /// Defines the properties of event to emit.
+  with: EventProperties?
+}
+
+/// ForTaskConfiguration
+///
+/// The definition of the loop that iterates over a range of values.
+class For {
+  /// ForEach
+  ///
+  /// The name of the variable used to store the current item being enumerated.
+  ///
+  /// Default if undefined: `"item"`
+  each: String?
+
+  /// ForIn
+  ///
+  /// A runtime expression used to get the collection to enumerate.
+  `in`: String
+
+  /// ForAt
+  ///
+  /// The name of the variable used to store the index of the current item being enumerated.
+  ///
+  /// Default if undefined: `"index"`
+  at: String?
+}
+
+/// ListenTaskConfiguration
+///
+/// The configuration of the listener to use.
+class Listen {
+  /// ListenTo
+  ///
+  /// Defines the event(s) to listen to.
+  to: EventConsumptionStrategy
+
+  /// ListenAndReadAs
+  ///
+  /// Specifies how events are read during the listen operation.
+  ///
+  /// Default if undefined: `"data"`
+  `read`: ("data"|"envelope"|"raw")?
+}
+
+/// RaiseTaskConfiguration
+///
+/// The definition of the error to raise.
+class Raise {
+  /// RaiseTaskError
+  error: Error|String
+}
+
+/// RunTaskConfiguration
+///
+/// The configuration of the process to execute.
+class Run {
+  /// AwaitProcessCompletion
+  ///
+  /// Whether to await the process completion before continuing.
+  ///
+  /// Default if undefined: `true`
+  await: Boolean?
+
+  /// ProcessReturnType
+  ///
+  /// Configures the output of the process.
+  ///
+  /// Default if undefined: `"stdout"`
+  return: ("stdout"|"stderr"|"code"|"all"|"none")?
+}
+
+/// RunContainer
+///
+/// Enables the execution of external processes encapsulated within a containerized environment.
+class RunAlternate0 {
+  /// Container
+  ///
+  /// The configuration of the container to run.
+  container: Container
+}
+
+/// Container
+///
+/// The configuration of the container to run.
+class Container {
+  /// ContainerImage
+  ///
+  /// The name of the container image to run.
+  image: String
+
+  /// ContainerName
+  ///
+  /// A runtime expression, if any, used to give specific name to the container.
+  name: String?
+
+  /// ContainerCommand
+  ///
+  /// The command, if any, to execute on the container.
+  command: String?
+
+  /// ContainerPorts
+  ///
+  /// The container's port mappings, if any.
+  ports: Dynamic?
+
+  /// ContainerVolumes
+  ///
+  /// The container's volume mappings, if any.
+  volumes: Dynamic?
+
+  /// ContainerEnvironment
+  ///
+  /// A key/value mapping of the environment variables, if any, to use when running the configured
+  /// process.
+  environment: Dynamic?
+
+  /// ContainerLifetime
+  ///
+  /// An object, if any, used to configure the container's lifetime
+  lifetime: ContainerLifetime?
+}
+
+/// RunScript
+///
+/// Enables the execution of custom scripts or code within a workflow, empowering workflows to perform
+/// specialized logic, data processing, or integration tasks by executing user-defined scripts written in
+/// various programming languages.
+class RunAlternate1 {
+  /// Script
+  ///
+  /// The configuration of the script to run.
+  script: Script
+}
+
+/// Script
+///
+/// The configuration of the script to run.
+class Script {
+  /// ScriptLanguage
+  ///
+  /// The language of the script to run.
+  language: String
+
+  /// ScriptArguments
+  ///
+  /// A key/value mapping of the arguments, if any, to use when running the configured script.
+  arguments: Mapping<String, Any>?
+
+  /// ScriptEnvironment
+  ///
+  /// A key/value mapping of the environment variables, if any, to use when running the configured script
+  /// process.
+  environment: Mapping<String, Any>?
+}
+
+/// InlineScript
+///
+/// The script's code.
+class ScriptAlternate0 {
+  /// InlineScriptCode
+  code: String
+}
+
+/// ExternalScript
+///
+/// The script's resource.
+class ScriptAlternate1 {
+  /// ExternalScriptResource
+  source: ExternalResource
+}
+
+/// RunShell
+///
+/// Enables the execution of shell commands within a workflow, enabling workflows to interact with the
+/// underlying operating system and perform system-level operations, such as file manipulation,
+/// environment configuration, or system administration tasks.
+class RunAlternate2 {
+  /// Shell
+  ///
+  /// The configuration of the shell command to run.
+  shell: Shell
+}
+
+/// Shell
+///
+/// The configuration of the shell command to run.
+class Shell {
+  /// ShellCommand
+  ///
+  /// The shell command to run.
+  command: String
+
+  /// ShellArguments
+  ///
+  /// A list of the arguments of the shell command to run.
+  arguments: Mapping<String, Any>?
+
+  /// ShellEnvironment
+  ///
+  /// A key/value mapping of the environment variables, if any, to use when running the configured
+  /// process.
+  environment: Mapping<String, Any>?
+}
+
+/// RunWorkflow
+///
+/// Enables the invocation and execution of nested workflows within a parent workflow, facilitating
+/// modularization, reusability, and abstraction of complex logic or business processes by encapsulating
+/// them into standalone workflow units.
+class RunAlternate3 {
+  /// SubflowConfiguration
+  ///
+  /// The configuration of the workflow to run.
+  workflow: Workflow
+}
+
+/// SubflowConfiguration
+///
+/// The configuration of the workflow to run.
+class Workflow {
+  /// SubflowNamespace
+  ///
+  /// The namespace the workflow to run belongs to.
+  namespace: String
+
+  /// SubflowName
+  ///
+  /// The name of the workflow to run.
+  name: String
+
+  /// SubflowVersion
+  ///
+  /// The version of the workflow to run. Defaults to latest.
+  ///
+  /// Default if undefined: `"latest"`
+  version: String
+
+  /// SubflowInput
+  ///
+  /// The data, if any, to pass as input to the workflow to execute. The value should be validated
+  /// against the target workflow's input schema, if specified.
+  input: Mapping<String, Any>?
+}
+
+/// SwitchCase
+///
+/// The definition of a case within a switch task, defining a condition and corresponding tasks to
+/// execute if the condition is met.
+class Switch {
+  /// SwitchCaseCondition
+  ///
+  /// A runtime expression used to determine whether or not the case matches.
+  `when`: String?
+
+  /// SwitchCaseOutcome
+  ///
+  /// The flow directive to execute when the case matches.
+  then: FlowDirective
+}
+
+/// TryTaskCatch
+///
+/// The object used to define the errors to catch.
+class Catch {
+  /// CatchErrors
+  ///
+  /// static error filter
+  errors: Errors?
+
+  /// CatchAs
+  ///
+  /// The name of the runtime expression variable to save the error as. Defaults to 'error'.
+  `as`: String?
+
+  /// CatchWhen
+  ///
+  /// A runtime expression used to determine whether to catch the filtered error.
+  `when`: String?
+
+  /// CatchExceptWhen
+  ///
+  /// A runtime expression used to determine whether not to catch the filtered error.
+  exceptWhen: String?
+
+  retry: (RetryPolicy|String)?
+
+  /// TryTaskCatchDo
+  ///
+  /// The definition of the task(s) to run when catching an error.
+  do: TaskList?
+}
+
+/// CatchErrors
+///
+/// static error filter
+class Errors {
+  with: ErrorFilter?
+}
+
+/// AuthenticationPolicyReference
+///
+/// The reference of the authentication policy to use.
+class ReferenceableAuthenticationPolicyAlternate0 {
+  /// ReferenceableAuthenticationPolicyName
+  ///
+  /// The name of the authentication policy to use.
+  use: String(!isEmpty)
+}
+
+/// SecretBasedAuthenticationPolicy
+///
+/// Represents an authentication policy based on secrets.
+class SecretBasedAuthenticationPolicy {
+  /// SecretBasedAuthenticationPolicyName
+  ///
+  /// The name of the authentication policy to use.
+  use: String(!isEmpty)
+}
+
+/// BasicAuthenticationPolicy
+///
+/// Use basic authentication.
+class AuthenticationPolicyAlternate0 {
+  /// BasicAuthenticationPolicyConfiguration
+  ///
+  /// The configuration of the basic authentication policy.
+  basic: BasicAlternate0|SecretBasedAuthenticationPolicy
+}
+
+/// BasicAuthenticationProperties
+///
+/// Inline configuration of the basic authentication policy.
+class BasicAlternate0 {
+  /// The username to use.
+  username: String
+
+  /// The password to use.
+  password: String
+}
+
+/// BearerAuthenticationPolicy
+///
+/// Use bearer authentication.
+class AuthenticationPolicyAlternate1 {
+  /// BearerAuthenticationPolicyConfiguration
+  ///
+  /// The configuration of the bearer authentication policy.
+  bearer: BearerAlternate0|SecretBasedAuthenticationPolicy
+}
+
+/// BearerAuthenticationProperties
+///
+/// Inline configuration of the bearer authentication policy.
+class BearerAlternate0 {
+  /// The bearer token to use.
+  token: String
+}
+
+/// DigestAuthenticationPolicy
+///
+/// Use digest authentication.
+class AuthenticationPolicyAlternate2 {
+  /// DigestAuthenticationPolicyConfiguration
+  ///
+  /// The configuration of the digest authentication policy.
+  digest: DigestAlternate0|SecretBasedAuthenticationPolicy
+}
+
+/// DigestAuthenticationProperties
+///
+/// Inline configuration of the digest authentication policy.
+class DigestAlternate0 {
+  /// The username to use.
+  username: String
+
+  /// The password to use.
+  password: String
+}
+
+/// OAuth2AuthenticationPolicy
+///
+/// Use OAuth2 authentication.
+class AuthenticationPolicyAlternate3 {
+  /// OAuth2AuthenticationPolicyConfiguration
+  ///
+  /// The configuration of the OAuth2 authentication policy.
+  oauth2: Dynamic|SecretBasedAuthenticationPolicy
+}
+
+/// OpenIdConnectAuthenticationPolicy
+///
+/// Use OpenIdConnect authentication.
+class AuthenticationPolicyAlternate4 {
+  /// OpenIdConnectAuthenticationPolicyConfiguration
+  ///
+  /// The configuration of the OpenIdConnect authentication policy.
+  oidc: Oauth2AuthenticationProperties|SecretBasedAuthenticationPolicy
+}
+
+/// OAuth2AutenthicationData
+///
+/// Inline configuration of the OAuth2 authentication policy.
+class Oauth2AuthenticationProperties {
+  /// OAuth2AutenthicationDataAuthority
+  ///
+  /// The URI that references the OAuth2 authority to use.
+  authority: UriTemplate?
+
+  /// OAuth2AutenthicationDataGrant
+  ///
+  /// The grant type to use.
+  grant: (
+    "authorization_code"
+    |"client_credentials"
+    |"password"
+    |"refresh_token"
+    |"urn:ietf:params:oauth:grant-type:token-exchange")?
+
+  /// OAuth2AutenthicationDataClient
+  ///
+  /// The definition of an OAuth2 client.
+  client: Client?
+
+  /// OAuth2TokenRequest
+  ///
+  /// The configuration of an OAuth2 token request
+  request: Request?
+
+  /// OAuth2Issuers
+  ///
+  /// A list that contains that contains valid issuers that will be used to check against the issuer of
+  /// generated tokens.
+  issuers: Listing<String>?
+
+  /// OAuth2AutenthicationDataScopes
+  ///
+  /// The scopes, if any, to request the token for.
+  scopes: Listing<String>?
+
+  /// OAuth2AutenthicationDataAudiences
+  ///
+  /// The audiences, if any, to request the token for.
+  audiences: Listing<String>?
+
+  /// OAuth2AutenthicationDataUsername
+  ///
+  /// The username to use. Used only if the grant type is Password.
+  username: String?
+
+  /// OAuth2AutenthicationDataPassword
+  ///
+  /// The password to use. Used only if the grant type is Password.
+  password: String?
+
+  /// OAuth2AutenthicationDataSubject
+  ///
+  /// The security token that represents the identity of the party on behalf of whom the request is being
+  /// made.
+  subject: Oauth2Token?
+
+  /// OAuth2AutenthicationDataActor
+  ///
+  /// The security token that represents the identity of the acting party.
+  actor: Oauth2Token?
+}
+
+/// OAuth2AutenthicationDataClient
+///
+/// The definition of an OAuth2 client.
+class Client {
+  /// ClientId
+  ///
+  /// The client id to use.
+  id: String?
+
+  /// ClientSecret
+  ///
+  /// The client secret to use, if any.
+  secret: String?
+
+  /// ClientAssertion
+  ///
+  /// A JWT containing a signed assertion with your application credentials.
+  assertion: String?
+
+  /// ClientAuthentication
+  ///
+  /// The authentication method to use to authenticate the client.
+  ///
+  /// Default if undefined: `"client_secret_post"`
+  authentication: ("client_secret_basic"|"client_secret_post"|"client_secret_jwt"|"private_key_jwt"|"none")?
+}
+
+/// OAuth2TokenRequest
+///
+/// The configuration of an OAuth2 token request
+class Request {
+  /// Oauth2TokenRequestEncoding
+  ///
+  /// Default if undefined: `"application/x-www-form-urlencoded"`
+  encoding: ("application/x-www-form-urlencoded"|"application/json")?
+}
+
+/// OAuth2TokenDefinition
+///
+/// Represents an OAuth2 token.
+class Oauth2Token {
+  /// OAuth2Token
+  ///
+  /// The security token to use.
+  token: String
+
+  /// OAuth2TokenType
+  ///
+  /// The type of the security token to use.
+  type: String
+}
+
+/// DurationInline
+///
+/// The inline definition of a duration.
+class DurationAlternate0 {
+  /// DurationDays
+  ///
+  /// Number of days, if any.
+  days: Int?
+
+  /// DurationHours
+  ///
+  /// Number of days, if any.
+  hours: Int?
+
+  /// DurationMinutes
+  ///
+  /// Number of minutes, if any.
+  minutes: Int?
+
+  /// DurationSeconds
+  ///
+  /// Number of seconds, if any.
+  seconds: Int?
+
+  /// DurationMilliseconds
+  ///
+  /// Number of milliseconds, if any.
+  milliseconds: Int?
+}
+
+/// Error
+///
+/// Represents an error.
+class Error {
+  /// ErrorType
+  ///
+  /// A URI reference that identifies the error type.
+  type: UriTemplate|RuntimeExpression
+
+  /// ErrorStatus
+  ///
+  /// The status code generated by the origin for this occurrence of the error.
+  status: Int
+
+  /// ErrorInstance
+  ///
+  /// A JSON Pointer used to reference the component the error originates from.
+  instance: (String|RuntimeExpression)?
+
+  /// ErrorTitle
+  ///
+  /// A short, human-readable summary of the error.
+  title: String?
+
+  /// ErrorDetails
+  ///
+  /// A human-readable explanation specific to this occurrence of the error.
+  detail: String?
+}
+
+/// ErrorFilter
+///
+/// Error filtering base on static values. For error filtering on dynamic values, use catch.when property
+class ErrorFilter {
+  /// if present, means this value should be used for filtering
+  type: String?
+
+  /// if present, means this value should be used for filtering
+  status: Int?
+
+  /// if present, means this value should be used for filtering
+  instance: String?
+
+  /// if present, means this value should be used for filtering
+  title: String?
+
+  /// if present, means this value should be used for filtering
+  details: String?
+}
+
+/// EndpointConfiguration
+class EndpointAlternate2 {
+  /// EndpointUri
+  ///
+  /// The endpoint's URI.
+  uri: UriTemplate|RuntimeExpression
+
+  /// EndpointAuthentication
+  ///
+  /// The authentication policy to use.
+  authentication: ReferenceableAuthenticationPolicy?
+}
+
+/// EventProperties
+///
+/// Describes the properties of an event.
+class EventProperties {
+  /// EventId
+  ///
+  /// The event's unique identifier.
+  id: String?
+
+  /// EventSource
+  ///
+  /// Identifies the context in which an event happened.
+  source: (UriTemplate|RuntimeExpression)?
+
+  /// EventType
+  ///
+  /// This attribute contains a value describing the type of event related to the originating occurrence.
+  type: String?
+
+  /// EventTime
+  ///
+  /// When the event occured.
+  time: (String|RuntimeExpression)?
+
+  /// EventSubject
+  ///
+  /// The subject of the event.
+  subject: String?
+
+  /// EventDataContentType
+  ///
+  /// Content type of data value. This attribute enables data to carry any type of content, whereby
+  /// format and encoding might differ from that of the chosen event format.
+  datacontenttype: String?
+
+  /// EventDataschema
+  ///
+  /// The schema describing the event format.
+  dataschema: (UriTemplate|RuntimeExpression)?
+
+  /// EventData
+  ///
+  /// The event's payload data
+  data: (RuntimeExpression|Any)?
+}
+
+/// AllEventConsumptionStrategy
+class EventConsumptionStrategyAlternate0 {
+  /// AllEventConsumptionStrategyConfiguration
+  ///
+  /// A list containing all the events that must be consumed.
+  all: Listing<EventFilter>
+}
+
+/// AnyEventConsumptionStrategy
+class EventConsumptionStrategyAlternate1 {
+  /// AnyEventConsumptionStrategyConfiguration
+  ///
+  /// A list containing any of the events to consume.
+  any: Listing<EventFilter>
+
+  until: (
+    String
+    |
+    EventConsumptionStrategyAlternate0
+    |EventConsumptionStrategyAlternate1
+    |EventConsumptionStrategyAlternate2)?
+}
+
+/// OneEventConsumptionStrategy
+class EventConsumptionStrategyAlternate2 {
+  /// OneEventConsumptionStrategyConfiguration
+  ///
+  /// The single event to consume.
+  one: EventFilter
+}
+
+/// EventFilter
+///
+/// An event filter is a mechanism used to selectively process or handle events based on predefined
+/// criteria, such as event type, source, or specific attributes.
+class EventFilter {
+  /// WithEvent
+  ///
+  /// An event filter is a mechanism used to selectively process or handle events based on predefined
+  /// criteria, such as event type, source, or specific attributes.
+  with: EventProperties
+
+  /// EventFilterCorrelate
+  ///
+  /// A correlation is a link between events and data, established by mapping event attributes to
+  /// specific data attributes, allowing for coordinated processing or handling based on event
+  /// characteristics.
+  correlate: Mapping<String, Correlate>?
+}
+
+class Correlate {
+  /// CorrelateFrom
+  ///
+  /// A runtime expression used to extract the correlation value from the filtered event.
+  from: String
+
+  /// CorrelateExpect
+  ///
+  /// A constant or a runtime expression, if any, used to determine whether or not the extracted
+  /// correlation value matches expectations. If not set, the first extracted value will be used as the
+  /// correlation's expectation.
+  expect: String?
+}
+
+/// Extension
+///
+/// The definition of an extension.
+class Extension {
+  /// ExtensionTarget
+  ///
+  /// The type of task to extend.
+  extend: "call"|"composite"|"emit"|"for"|"listen"|"raise"|"run"|"set"|"switch"|"try"|"wait"|"all"
+
+  /// ExtensionCondition
+  ///
+  /// A runtime expression, if any, used to determine whether or not the extension should apply in the
+  /// specified context.
+  `when`: String?
+
+  /// ExtensionDoBefore
+  ///
+  /// The task(s) to execute before the extended task, if any.
+  before: TaskList?
+
+  /// ExtensionDoAfter
+  ///
+  /// The task(s) to execute after the extended task, if any.
+  after: TaskList?
+}
+
+/// ExternalResource
+///
+/// Represents an external resource.
+class ExternalResource {
+  /// ExternalResourceName
+  ///
+  /// The name of the external resource, if any.
+  name: String?
+
+  /// ExternalResourceEndpoint
+  ///
+  /// The endpoint of the external resource.
+  endpoint: Endpoint
+}
+
+/// Input
+///
+/// Configures the input of a workflow or task.
+class Input {
+  /// InputSchema
+  ///
+  /// The schema used to describe and validate the input of the workflow or task.
+  schema: Schema?
+
+  /// InputFrom
+  ///
+  /// A runtime expression, if any, used to mutate and/or filter the input of the workflow or task.
+  from: (String|Dynamic)?
+}
+
+/// Output
+///
+/// Configures the output of a workflow or task.
+class Output {
+  /// OutputSchema
+  ///
+  /// The schema used to describe and validate the output of the workflow or task.
+  schema: Schema?
+
+  /// OutputAs
+  ///
+  /// A runtime expression, if any, used to mutate and/or filter the output of the workflow or task.
+  `as`: (String|Dynamic)?
+}
+
+/// Export
+///
+/// Set the content of the context. .
+class Export {
+  /// ExportSchema
+  ///
+  /// The schema used to describe and validate the workflow context.
+  schema: Schema?
+
+  /// ExportAs
+  ///
+  /// A runtime expression, if any, used to export the output data to the context.
+  `as`: (String|Dynamic)?
+}
+
+/// RetryPolicy
+///
+/// Defines a retry policy.
+class RetryPolicy {
+  /// RetryWhen
+  ///
+  /// A runtime expression, if any, used to determine whether or not to retry running the task, in a
+  /// given context.
+  `when`: String?
+
+  /// RetryExcepWhen
+  ///
+  /// A runtime expression used to determine whether or not to retry running the task, in a given
+  /// context.
+  exceptWhen: String?
+
+  /// RetryDelay
+  ///
+  /// The duration to wait between retry attempts.
+  delay: Duration?
+
+  /// RetryBackoff
+  ///
+  /// The retry duration backoff.
+  backoff: (BackoffAlternate0|BackoffAlternate1|BackoffAlternate2)?
+
+  /// RetryLimit
+  ///
+  /// The retry limit, if any.
+  limit: Limit?
+
+  /// RetryPolicyJitter
+  ///
+  /// The parameters, if any, that control the randomness or variability of the delay between retry
+  /// attempts.
+  jitter: Jitter?
+}
+
+/// ConstantBackoff
+class BackoffAlternate0 {
+  /// The definition of the constant backoff to use, if any.
+  constant: Dynamic
+}
+
+/// ExponentialBackOff
+class BackoffAlternate1 {
+  /// The definition of the exponential backoff to use, if any.
+  exponential: Dynamic
+}
+
+/// LinearBackoff
+class BackoffAlternate2 {
+  /// The definition of the linear backoff to use, if any.
+  linear: Dynamic
+}
+
+/// RetryLimit
+///
+/// The retry limit, if any.
+class Limit {
+  /// RetryLimitAttempt
+  attempt: Attempt?
+
+  /// RetryLimitDuration
+  ///
+  /// The duration limit, if any, for all retry attempts.
+  duration: Duration?
+}
+
+/// RetryLimitAttempt
+class Attempt {
+  /// RetryLimitAttemptCount
+  ///
+  /// The maximum amount of retry attempts, if any.
+  count: Int?
+
+  /// RetryLimitAttemptDuration
+  ///
+  /// The maximum duration for each retry attempt.
+  duration: Duration?
+}
+
+/// RetryPolicyJitter
+///
+/// The parameters, if any, that control the randomness or variability of the delay between retry
+/// attempts.
+class Jitter {
+  /// RetryPolicyJitterFrom
+  ///
+  /// The minimum duration of the jitter range.
+  from: Duration
+
+  /// RetryPolicyJitterTo
+  ///
+  /// The maximum duration of the jitter range.
+  to: Duration
+}
+
+/// Schema
+///
+/// Represents the definition of a schema.
+class Schema {
+  /// SchemaFormat
+  ///
+  /// The schema's format. Defaults to 'json'. The (optional) version of the format can be set using
+  /// `{format}:{version}`.
+  ///
+  /// Default if undefined: `"json"`
+  format: String?
+}
+
+/// SchemaInline
+class SchemaAlternate0 {
+  /// The schema's inline definition.
+  document: Any
+}
+
+/// SchemaExternal
+class SchemaAlternate1 {
+  /// SchemaExternalResource
+  ///
+  /// The schema's external resource.
+  resource: ExternalResource
+}
+
+/// Timeout
+///
+/// The definition of a timeout.
+class Timeout {
+  /// TimeoutAfter
+  ///
+  /// The duration after which to timeout.
+  after: Duration
+}
+
+/// Catalog
+///
+/// The definition of a resource catalog.
+class Catalog {
+  /// CatalogEndpoint
+  ///
+  /// The root URL where the catalog is hosted.
+  endpoint: Endpoint
+}
+
+/// ContainerLifetime
+///
+/// The configuration of a container's lifetime
+class ContainerLifetime {
+  /// ContainerCleanupPolicy
+  ///
+  /// The container cleanup policy to use
+  ///
+  /// Default if undefined: `"never"`
+  cleanup: "always"|"never"|"eventually"
+
+  /// ContainerLifetimeDuration
+  ///
+  /// The duration after which to cleanup the container, in case the cleanup policy has been set to
+  /// 'eventually'
+  after: Duration?
+}
+
+class If {
+  cleanup: "eventually"?
+}
+
+/// ProcessResult
+///
+/// The object returned by a run task when its return type has been set 'all'.
+class ProcessResult {
+  /// ProcessExitCode
+  ///
+  /// The process's exit code.
+  code: Int
+
+  /// ProcessStandardOutput
+  ///
+  /// The content of the process's STDOUT.
+  stdout: String
+
+  /// ProcessStandardError
+  ///
+  /// The content of the process's STDERR.
+  stderr: String
+}
+
+/// AsyncApiServer
+///
+/// Configures the target server of an AsyncAPI operation.
+class AsyncApiServer {
+  /// AsyncApiServerName
+  ///
+  /// The target server's name.
+  name: String
+
+  /// AsyncApiServerVariables
+  ///
+  /// The target server's variables, if any.
+  variables: Dynamic?
+}
+
+/// AsyncApiOutboundMessage
+///
+/// An object used to configure the message to publish using the target operation.
+class AsyncApiOutboundMessage {
+  /// AsyncApiMessagePayload
+  ///
+  /// The message's payload, if any.
+  payload: Mapping<String, Any>?
+
+  /// AsyncApiMessageHeaders
+  ///
+  /// The message's headers, if any.
+  headers: Mapping<String, Any>?
+}
+
+/// AsyncApiInboundMessage
+///
+/// Represents a message counsumed by an AsyncAPI subscription.
+class AsyncApiInboundMessage {
+  /// AsyncApiMessagePayload
+  ///
+  /// The message's payload, if any.
+  payload: Mapping<String, Any>?
+
+  /// AsyncApiMessageHeaders
+  ///
+  /// The message's headers, if any.
+  headers: Mapping<String, Any>?
+
+  /// AsyncApiMessageCorrelationId
+  ///
+  /// The message's correlation id, if any.
+  correlationId: String?
+}
+
+/// AsyncApiSubscription
+///
+/// An object used to configure the subscription to messages consumed using the target operation.
+class AsyncApiSubscription {
+  /// AsyncApiSubscriptionCorrelation
+  ///
+  /// A runtime expression, if any, used to filter consumed messages.
+  filter: RuntimeExpression?
+
+  /// AsyncApiMessageConsumptionPolicy
+  ///
+  /// An object used to configure the subscription's message consumption policy.
+  consume: AsyncApiMessageConsumptionPolicy
+
+  /// AsyncApiSubscriptionIterator
+  ///
+  /// Configures the iterator, if any, for processing consumed messages(s).
+  foreach: SubscriptionIterator?
+}
+
+/// AsyncApiMessageConsumptionPolicy
+///
+/// An object used to configure a subscription's message consumption policy.
+class AsyncApiMessageConsumptionPolicy {
+  /// AsyncApiMessageConsumptionPolicyFor
+  ///
+  /// Specifies the time period over which messages will be consumed.
+  `for`: Duration?
+}
+
+/// AsyncApiMessageConsumptionPolicyAmount
+class AsyncApiMessageConsumptionPolicyAlternate0 {
+  /// The amount of (filtered) messages to consume before disposing of the subscription.
+  amount: Int
+}
+
+/// AsyncApiMessageConsumptionPolicyWhile
+class AsyncApiMessageConsumptionPolicyAlternate1 {
+  /// A runtime expression evaluated after each consumed (filtered) message to decide if message
+  /// consumption should continue.
+  while: RuntimeExpression
+}
+
+/// AsyncApiMessageConsumptionPolicyUntil
+class AsyncApiMessageConsumptionPolicyAlternate2 {
+  /// A runtime expression evaluated before each consumed (filtered) message to decide if message
+  /// consumption should continue.
+  until: RuntimeExpression
+}
+
+/// SubscriptionIterator
+///
+/// Configures the iteration over each item (event or message) consumed by a subscription.
+class SubscriptionIterator {
+  /// SubscriptionIteratorItem
+  ///
+  /// The name of the variable used to store the current item being enumerated.
+  ///
+  /// Default if undefined: `"item"`
+  item: String?
+
+  /// SubscriptionIteratorIndex
+  ///
+  /// The name of the variable used to store the index of the current item being enumerated.
+  ///
+  /// Default if undefined: `"index"`
+  at: String?
+
+  /// SubscriptionIteratorTasks
+  ///
+  /// The tasks to perform for each consumed item.
+  do: TaskList?
+
+  /// SubscriptionIteratorOutput
+  ///
+  /// An object, if any, used to customize the item's output and to document its schema.
+  output: Output?
+
+  /// SubscriptionIteratorExport
+  ///
+  /// An object, if any, used to customize the content of the workflow context.
+  export: Export?
+}
+
+/// TaskList
+///
+/// List of named tasks to perform.
+typealias TaskList = Listing<Mapping<String, Task>(length.isBetween(1, 1))>
+
+/// Task
+///
+/// A discrete unit of work that contributes to achieving the overall objectives defined by the workflow.
+typealias Task = CallTask|Dynamic
+
+/// CallTask
+///
+/// Defines the call to perform.
+typealias CallTask = TaskBase
+
+/// FlowDirective
+///
+/// Represents different transition options for a workflow.
+typealias FlowDirective = "continue"|"exit"|"end"|String
+
+/// ReferenceableAuthenticationPolicy
+///
+/// Represents a referenceable authentication policy.
+typealias ReferenceableAuthenticationPolicy = ReferenceableAuthenticationPolicyAlternate0|AuthenticationPolicy
+
+/// AuthenticationPolicy
+///
+/// Defines an authentication policy.
+typealias AuthenticationPolicy =
+  AuthenticationPolicyAlternate0
+  |AuthenticationPolicyAlternate1
+  |AuthenticationPolicyAlternate2
+  |AuthenticationPolicyAlternate3
+  |AuthenticationPolicyAlternate4
+
+typealias Duration =
+  DurationAlternate0
+  |String(matches(Regex(#"^P(?!$)(\d+(?:\.\d+)?Y)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?W)?(\d+(?:\.\d+)?D)?(T(?=\d)(\d+(?:\.\d+)?H)?(\d+(?:\.\d+)?M)?(\d+(?:\.\d+)?S)?)?$"#)))
+
+/// UriTemplate
+typealias UriTemplate =
+  String(matches(Regex(#"^[A-Za-z][A-Za-z0-9+\-.]*://.*"#)))
+  |Uri(matches(Regex(#"^[A-Za-z][A-Za-z0-9+\-.]*://.*"#)))
+
+/// Endpoint
+///
+/// Represents an endpoint.
+typealias Endpoint = RuntimeExpression|UriTemplate|EndpointAlternate2
+
+/// EventConsumptionStrategy
+///
+/// Describe the event consumption strategy to adopt.
+typealias EventConsumptionStrategy =
+  EventConsumptionStrategyAlternate0
+  |EventConsumptionStrategyAlternate1
+  |EventConsumptionStrategyAlternate2
+
+/// RuntimeExpression
+///
+/// A runtime expression.
+typealias RuntimeExpression = String(matches(Regex(#"^\s*\$\{.+\}\s*$"#)))
