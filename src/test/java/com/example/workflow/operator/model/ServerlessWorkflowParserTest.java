@@ -25,4 +25,13 @@ public class ServerlessWorkflowParserTest {
         ServerlessState state = wf.getStates().get(0);
         assertEquals(Duration.ofSeconds(2), state.getWait());
     }
+
+    @Test
+    void parsesSetDataObject() {
+        String json = "{\"states\":[{\"name\":\"s\",\"set\":{\"k\":\"v\"}}]}";
+        ServerlessWorkflow wf = ServerlessWorkflowParser.parse(json);
+        ServerlessState state = wf.getStates().get(0);
+        assertNotNull(state.getSet());
+        assertEquals("v", state.getSet().get("k"));
+    }
 }

@@ -3,6 +3,7 @@ package com.example.workflow.operator.model;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Duration;
+import java.util.Map;
 
 /**
  * Very small parser used for examples. It attempts to read a Serverless
@@ -28,6 +29,12 @@ public class ServerlessWorkflowParser {
                         JsonNode waitNode = state.get("wait");
                         if (waitNode != null && !waitNode.isNull()) {
                             s.setWait(parseDuration(waitNode));
+                        }
+                        JsonNode setNode = state.get("set");
+                        if (setNode != null && setNode.isObject()) {
+                            Map<String, String> values = new java.util.HashMap<>();
+                            setNode.fields().forEachRemaining(e -> values.put(e.getKey(), e.getValue().asText()));
+                            s.setSet(values);
                         }
                         wf.getStates().add(s);
                     }
