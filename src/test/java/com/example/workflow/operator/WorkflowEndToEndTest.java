@@ -2,6 +2,7 @@ package com.example.workflow.operator;
 
 import com.example.workflow.operator.api.WorkflowApiServer;
 import io.fabric8.kubernetes.client.KubernetesClient;
+import io.fabric8.kubernetes.client.server.mock.EnableKubernetesMockClient;
 import io.fabric8.kubernetes.client.server.mock.KubernetesMockServer;
 import io.javaoperatorsdk.operator.Operator;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ import java.net.http.HttpResponse;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled("Kubernetes server mock does not fully support CRDs")
+@EnableKubernetesMockClient
 public class WorkflowEndToEndTest {
 
     KubernetesMockServer server;
@@ -24,18 +25,17 @@ public class WorkflowEndToEndTest {
 
     @BeforeEach
     void setup() {
-        server = new KubernetesMockServer();
-        client = server.createClient();
+        // TODO: use server.expect() to ensure the mock server responds expectedly to the mock client requests
     }
 
     @AfterEach
     void cleanup() {
-        server.destroy();
+        server.clearExpectations();
     }
 
     @Test
     void workflowIsDeployed() throws Exception {
-        KubernetesClient client = server.createClient();
+
 
         Operator operator = new Operator(o -> o.withKubernetesClient(client));
         operator.register(new WorkflowResourceReconciler());
