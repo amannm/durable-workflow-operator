@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: workflow-operator
+rules:
+  - apiGroups: ["example.com"]
+    resources: ["workflows"]
+    verbs: ["*"]
+  - apiGroups: [""]
+    resources: ["pods","events"]
+    verbs: ["create","get","list","watch","delete"]

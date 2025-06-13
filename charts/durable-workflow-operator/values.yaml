@@ -1,0 +1,4 @@
+image:
+  repository: example/durable-workflow-operator
+  tag: latest
+  pullPolicy: IfNotPresent

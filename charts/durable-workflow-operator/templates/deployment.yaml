@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workflow-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workflow-operator
+  template:
+    metadata:
+      labels:
+        app: workflow-operator
+    spec:
+      serviceAccountName: workflow-operator
+      containers:
+        - name: operator
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["java", "-jar", "/app/durable-workflow-operator.jar"]
