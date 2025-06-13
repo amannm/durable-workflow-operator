@@ -1,0 +1,18 @@
+id: dsl-test
+version: "1.0"
+states:
+  - name: wait
+    wait: PT0.1S
+  - name: set
+    set:
+      foo: bar
+  - name: fetch
+    fetchUrl: FETCH_URL
+    fetchVar: fetched
+  - name: post
+    postUrl: POST_URL
+    postBody: hi
+    postVar: posted
+  - name: cleanup
+    unset:
+      - foo
