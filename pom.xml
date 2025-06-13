@@ -13,13 +13,18 @@
     <!-- Java Operator SDK -->
     <dependency>
       <groupId>io.javaoperatorsdk</groupId>
-      <artifactId>java-operator-sdk</artifactId>
+      <artifactId>operator-framework</artifactId>
       <version>5.1.1</version>
     </dependency>
     <!-- Serverless Workflow specification -->
     <dependency>
       <groupId>io.serverlessworkflow</groupId>
-      <artifactId>serverlessworkflow-impl</artifactId>
+      <artifactId>serverlessworkflow-util</artifactId>
+      <version>5.2.0.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>io.serverlessworkflow</groupId>
+      <artifactId>serverlessworkflow-api</artifactId>
       <version>7.1.0.Final</version>
     </dependency>
     <!-- Restate SDK core -->
