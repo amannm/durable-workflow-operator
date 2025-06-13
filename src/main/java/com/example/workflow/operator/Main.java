@@ -3,6 +3,7 @@ package com.example.workflow.operator;
 import io.fabric8.kubernetes.client.Config;
 import io.fabric8.kubernetes.client.DefaultKubernetesClient;
 import io.javaoperatorsdk.operator.Operator;
+import com.example.workflow.operator.api.WorkflowApiServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +15,12 @@ public class Main {
         try (DefaultKubernetesClient client = new DefaultKubernetesClient(Config.autoConfigure(null))) {
             Operator operator = new Operator(client);
             operator.register(new WorkflowReconciler());
+            WorkflowApiServer apiServer = new WorkflowApiServer(client);
+            apiServer.start();
             operator.start();
+            apiServer.stop();
+        } catch (Exception e) {
+            log.error("Operator failed", e);
         }
     }
 }
