@@ -14,13 +14,20 @@ public class WorkflowRunner {
     private static final Logger log = LoggerFactory.getLogger(WorkflowRunner.class);
 
     public void run(String definition) {
+        startService(definition);
+    }
+
+    ServerlessWorkflowService startService(String definition) {
         try {
             ServerlessWorkflow serverlessWorkflow = ServerlessWorkflowParser.parse(definition);
             log.info("Parsed workflow: {} - version {}", serverlessWorkflow.getId(), serverlessWorkflow.getVersion());
-            Endpoint endpoint = Endpoint.bind(new ServerlessWorkflowService(serverlessWorkflow)).build();
+            ServerlessWorkflowService service = new ServerlessWorkflowService(serverlessWorkflow);
+            Endpoint endpoint = Endpoint.bind(service).build();
             RestateHttpServer.listen(endpoint);
+            return service;
         } catch (Exception e) {
             log.error("Failed to parse workflow", e);
+            return null;
         }
     }
 
@@ -31,9 +38,14 @@ public class WorkflowRunner {
      */
     static class ServerlessWorkflowService {
         private final ServerlessWorkflow serverlessWorkflow;
+        private final java.util.Map<String, String> data = new java.util.HashMap<>();
 
         ServerlessWorkflowService(ServerlessWorkflow serverlessWorkflow) {
             this.serverlessWorkflow = serverlessWorkflow;
+        }
+
+        java.util.Map<String, String> getData() {
+            return data;
         }
 
         @dev.restate.sdk.annotation.Workflow
@@ -49,6 +61,9 @@ public class WorkflowRunner {
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                         }
+                    }
+                    if (state.getSet() != null) {
+                        data.putAll(state.getSet());
                     }
                 });
             }

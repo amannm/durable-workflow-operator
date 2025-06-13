@@ -24,4 +24,15 @@ public class WorkflowRunnerTest {
             server.verify(() -> RestateHttpServer.listen(Mockito.any(Endpoint.class)));
         }
     }
+
+    @Test
+    void setTaskUpdatesData() {
+        String json = "{\"states\":[{\"name\":\"s\",\"set\":{\"a\":\"b\"}}]}";
+        try (MockedStatic<RestateHttpServer> server = Mockito.mockStatic(RestateHttpServer.class)) {
+            server.when(() -> RestateHttpServer.listen(Mockito.any(Endpoint.class))).thenReturn(0);
+            WorkflowRunner runner = new WorkflowRunner();
+            WorkflowRunner.ServerlessWorkflowService service = runner.startService(json);
+            assertEquals("b", service.getData().get("a"));
+        }
+    }
 }
