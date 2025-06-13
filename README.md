@@ -10,6 +10,15 @@ into a system that accepts a workflow definition, deploys it on Kubernetes, star
 
 An embedded Jetty server exposes an HTTP endpoint on port `8080`. Posting a workflow definition to `/workflows` creates a `Workflow` custom resource which triggers execution via the operator.
 
+### Supported Tasks
+
+Workflows can currently execute the following simple tasks:
+
+- `wait` &mdash; pause execution for a specified duration
+- `set` &mdash; update workflow data with key/value pairs
+- `log` &mdash; write a message to the operator log
+- `fetch` &mdash; perform an HTTP GET and store the response
+
 ## Building
 
 This is a standard Maven project. To build it, run:
