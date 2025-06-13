@@ -4,7 +4,10 @@ import dev.restate.sdk.annotation.Workflow;
 import dev.restate.sdk.WorkflowContext;
 import com.example.workflow.operator.model.ServerlessWorkflow;
 import com.example.workflow.operator.model.ServerlessState;
+import dev.restate.sdk.endpoint.Endpoint;
+import dev.restate.sdk.http.vertx.RestateHttpServer;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -19,7 +22,13 @@ public class RestateWorkflowRunner {
 
     ServerlessWorkflowService startService(ServerlessWorkflow definition) {
         try {
-            throw new UnsupportedOperationException("TODO");
+            ServerlessWorkflowService service = new ServerlessWorkflowService(definition);
+            Endpoint endpoint =
+                    Endpoint.builder()
+                            .bind(service)
+                            .build();
+            RestateHttpServer.listen(endpoint);
+            return service;
         } catch (Exception e) {
             log.error("Failed to parse workflow", e);
             return null;
@@ -28,7 +37,7 @@ public class RestateWorkflowRunner {
 
     static class ServerlessWorkflowService {
         private final ServerlessWorkflow serverlessWorkflow;
-        private final java.util.Map<String, String> data = new java.util.HashMap<>();
+        private final Map<String, String> data = new HashMap<>();
 
         ServerlessWorkflowService(ServerlessWorkflow serverlessWorkflow) {
             this.serverlessWorkflow = serverlessWorkflow;
