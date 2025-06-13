@@ -33,6 +33,14 @@
 #   MAVEN_SKIP_RC - flag to disable loading of mavenrc files
 # ----------------------------------------------------------------------------
 
+# If Maven is installed on the system, use it directly to avoid downloading
+# the Maven distribution which requires network access. This keeps builds
+# functional in restricted environments.
+if command -v mvn >/dev/null 2>&1; then
+  mvn "$@"
+  exit $?
+fi
+
 if [ -z "$MAVEN_SKIP_RC" ]; then
 
   if [ -f /usr/local/etc/mavenrc ]; then

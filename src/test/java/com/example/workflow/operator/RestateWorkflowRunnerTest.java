@@ -3,6 +3,7 @@ package com.example.workflow.operator;
 import com.example.workflow.operator.model.ServerlessState;
 import com.example.workflow.operator.model.ServerlessWorkflow;
 import dev.restate.sdk.WorkflowContext;
+import dev.restate.common.function.ThrowingRunnable;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -24,15 +25,14 @@ public class RestateWorkflowRunnerTest {
         state.setSet(Map.of("done", "true"));
         wf.getStates().add(state);
 
-        RestateWorkflowRunner runner = new RestateWorkflowRunner();
-        RestateWorkflowRunner.ServerlessWorkflowService service = runner.startService(wf);
+        RestateWorkflowRunner.ServerlessWorkflowService service = new RestateWorkflowRunner.ServerlessWorkflowService(wf);
 
         WorkflowContext ctx = Mockito.mock(WorkflowContext.class);
         Mockito.doAnswer(invocation -> {
-            Runnable r = invocation.getArgument(1);
+            ThrowingRunnable r = invocation.getArgument(1);
             r.run();
             return null;
-        }).when(ctx).run(Mockito.anyString(), Mockito.any(Runnable.class));
+        }).when(ctx).run(Mockito.anyString(), Mockito.any(ThrowingRunnable.class));
 
         long start = System.currentTimeMillis();
         String result = service.run(ctx);
