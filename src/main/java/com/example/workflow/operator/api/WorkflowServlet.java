@@ -2,6 +2,8 @@ package com.example.workflow.operator.api;
 
 import com.example.workflow.operator.Workflow;
 import com.example.workflow.operator.WorkflowSpec;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import jakarta.servlet.http.HttpServlet;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 public class WorkflowServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(WorkflowServlet.class);
+    private static final ObjectMapper MAPPER = new ObjectMapper();
     private final KubernetesClient client;
 
     public WorkflowServlet(KubernetesClient client) {
@@ -25,6 +28,12 @@ public class WorkflowServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String definition = new String(req.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+        try {
+            MAPPER.readTree(definition);
+        } catch (JsonProcessingException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid workflow JSON");
+            return;
+        }
         Workflow wf = new Workflow();
         ObjectMeta meta = new ObjectMeta();
         meta.setName("wf-" + UUID.randomUUID());
