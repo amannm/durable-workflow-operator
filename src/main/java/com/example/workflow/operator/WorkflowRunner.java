@@ -1,7 +1,6 @@
 package com.example.workflow.operator;
 
 import dev.restate.sdk.WorkflowContext;
-import dev.restate.sdk.annotation.Workflow;
 import dev.restate.sdk.endpoint.Endpoint;
 import dev.restate.sdk.http.vertx.RestateHttpServer;
 import com.example.workflow.operator.model.ServerlessWorkflow;
