@@ -1,6 +1,6 @@
 package com.example.workflow.operator;
 
-public class WorkflowStatus {
+public class WorkflowResourceStatus {
     private String phase;
 
     public String getPhase() {

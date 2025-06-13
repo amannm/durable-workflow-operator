@@ -10,6 +10,12 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
+    <!-- Serverless Workflow API -->
+    <dependency>
+      <groupId>io.serverlessworkflow</groupId>
+      <artifactId>serverlessworkflow-api</artifactId>
+      <version>7.1.0.Final</version>
+    </dependency>
     <!-- Java Operator SDK -->
     <dependency>
       <groupId>io.javaoperatorsdk</groupId>

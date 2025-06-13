@@ -1,7 +1,7 @@
 package com.example.workflow.operator.api;
 
 import com.example.workflow.operator.Workflow;
-import com.example.workflow.operator.WorkflowSpec;
+import com.example.workflow.operator.WorkflowResourceSpec;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.fabric8.kubernetes.api.model.ObjectMeta;
@@ -38,7 +38,7 @@ public class WorkflowServlet extends HttpServlet {
         ObjectMeta meta = new ObjectMeta();
         meta.setName("wf-" + UUID.randomUUID());
         wf.setMetadata(meta);
-        WorkflowSpec spec = new WorkflowSpec();
+        WorkflowResourceSpec spec = new WorkflowResourceSpec();
         spec.setDefinition(definition);
         wf.setSpec(spec);
         try {

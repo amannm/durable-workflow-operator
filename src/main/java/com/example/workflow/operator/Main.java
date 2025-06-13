@@ -14,7 +14,7 @@ public class Main {
         log.info("Starting Durable Workflow Operator");
         try (DefaultKubernetesClient client = new DefaultKubernetesClient(Config.autoConfigure(null))) {
             Operator operator = new Operator();
-            operator.register(new WorkflowReconciler());
+            operator.register(new WorkflowResourceReconciler());
             WorkflowApiServer apiServer = new WorkflowApiServer(client);
             apiServer.start();
             operator.start();

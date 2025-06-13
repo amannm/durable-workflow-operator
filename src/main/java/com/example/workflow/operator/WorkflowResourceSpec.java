@@ -1,6 +1,6 @@
 package com.example.workflow.operator;
 
-public class WorkflowSpec {
+public class WorkflowResourceSpec {
     private String definition;
 
     public String getDefinition() {

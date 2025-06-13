@@ -14,6 +14,6 @@ import io.fabric8.kubernetes.model.annotation.ShortNames;
 @Plural("workflows")
 @Singular("workflow")
 @ShortNames("wf")
-public class Workflow extends CustomResource<WorkflowSpec, WorkflowStatus> {
+public class Workflow extends CustomResource<WorkflowResourceSpec, WorkflowResourceStatus> {
     // no additional fields
 }
