@@ -1,0 +1,14 @@
+apiVersion: example.com/v1alpha1
+kind: Workflow
+metadata:
+  name: sample-workflow
+spec:
+  definition: |
+    id: sample
+    version: '1.0'
+    states:
+      - name: hello
+        type: operation
+        action:
+          functionRef:
+            refName: helloWorld

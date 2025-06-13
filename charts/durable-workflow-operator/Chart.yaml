@@ -1,0 +1,5 @@
+apiVersion: v2
+name: durable-workflow-operator
+version: 0.1.0
+appVersion: "0.1.0"
+description: Helm chart to deploy Durable Workflow Operator
