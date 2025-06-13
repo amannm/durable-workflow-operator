@@ -6,6 +6,10 @@ import com.example.workflow.operator.model.ServerlessWorkflow;
 import com.example.workflow.operator.model.ServerlessState;
 import dev.restate.sdk.endpoint.Endpoint;
 import dev.restate.sdk.http.vertx.RestateHttpServer;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +63,19 @@ public class RestateWorkflowRunner {
                             Thread.sleep(wait.toMillis());
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
+                        }
+                    }
+                    if (state.getLog() != null) {
+                        log.info("{}", state.getLog());
+                    }
+                    if (state.getFetchUrl() != null && state.getFetchVar() != null) {
+                        HttpClient http = HttpClient.newHttpClient();
+                        try {
+                            HttpRequest request = HttpRequest.newBuilder(URI.create(state.getFetchUrl())).GET().build();
+                            HttpResponse<String> resp = http.send(request, HttpResponse.BodyHandlers.ofString());
+                            data.put(state.getFetchVar(), resp.body());
+                        } catch (Exception e) {
+                            log.error("HTTP fetch failed", e);
                         }
                     }
                     if (state.getSet() != null) {
