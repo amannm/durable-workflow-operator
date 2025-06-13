@@ -47,9 +47,7 @@ public class WorkflowServletTest {
     @Test
     void createsWorkflowResource() throws Exception {
         KubernetesClient client = Mockito.mock(KubernetesClient.class);
-        @SuppressWarnings("unchecked")
-        MixedOperation<Workflow, ?, ?, Resource<Workflow>> op = Mockito.mock(MixedOperation.class);
-        @SuppressWarnings("unchecked")
+        var op = Mockito.mock(MixedOperation.class);
         Resource<Workflow> resource = Mockito.mock(Resource.class);
         Mockito.when(client.resources(Workflow.class)).thenReturn(op);
         Mockito.when(op.inNamespace("default")).thenReturn(op);
