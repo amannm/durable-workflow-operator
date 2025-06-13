@@ -18,12 +18,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public class WorkflowServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(WorkflowServlet.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private final KubernetesClient client;
+    private transient KubernetesClient client;
 
     public WorkflowServlet(KubernetesClient client) {
         this.client = client;
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        this.client = null;
     }
 
     @Override

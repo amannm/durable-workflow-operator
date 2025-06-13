@@ -6,10 +6,10 @@ public class WorkflowResourceSpec {
     private ServerlessWorkflow definition;
 
     public ServerlessWorkflow getDefinition() {
-        return definition;
+        return definition == null ? null : definition.copy();
     }
 
     public void setDefinition(ServerlessWorkflow definition) {
-        this.definition = definition;
+        this.definition = definition == null ? null : definition.copy();
     }
 }

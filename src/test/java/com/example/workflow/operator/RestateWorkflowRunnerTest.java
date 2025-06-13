@@ -23,7 +23,7 @@ public class RestateWorkflowRunnerTest {
         ServerlessState state = new ServerlessState("wait");
         state.setWait(Duration.ofMillis(50));
         state.setSet(Map.of("done", "true"));
-        wf.getStates().add(state);
+        wf.addState(state);
 
         RestateWorkflowRunner.ServerlessWorkflowService service = new RestateWorkflowRunner.ServerlessWorkflowService(wf);
 
