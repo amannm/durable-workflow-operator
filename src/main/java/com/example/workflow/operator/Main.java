@@ -13,12 +13,18 @@ public class Main {
     public static void main(String[] args) {
         log.info("Starting Durable Workflow Operator");
         try (DefaultKubernetesClient client = new DefaultKubernetesClient(Config.autoConfigure(null))) {
-            Operator operator = new Operator();
+            Operator operator = new Operator(client);
             operator.register(new WorkflowResourceReconciler());
             WorkflowApiServer apiServer = new WorkflowApiServer(client);
             apiServer.start();
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                try {
+                    apiServer.stop();
+                } catch (Exception e) {
+                    log.error("Failed to stop API server", e);
+                }
+            }));
             operator.start();
-            apiServer.stop();
         } catch (Exception e) {
             log.error("Operator failed", e);
         }

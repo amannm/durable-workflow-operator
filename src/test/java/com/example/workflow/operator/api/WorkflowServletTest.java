@@ -68,6 +68,8 @@ public class WorkflowServletTest {
 
         Mockito.verify(resource).create();
         Workflow created = captor.getValue();
-        assertEquals(json, created.getSpec().getDefinition());
+        assertNotNull(created.getSpec().getDefinition());
+        assertEquals("test", created.getSpec().getDefinition().getId());
+        assertEquals("1.0", created.getSpec().getDefinition().getVersion());
     }
 }
