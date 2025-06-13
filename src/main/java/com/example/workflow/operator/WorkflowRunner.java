@@ -6,6 +6,7 @@ import dev.restate.sdk.http.vertx.RestateHttpServer;
 import com.example.workflow.operator.model.ServerlessWorkflow;
 import com.example.workflow.operator.model.ServerlessWorkflowParser;
 import com.example.workflow.operator.model.ServerlessState;
+import java.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,17 @@ public class WorkflowRunner {
         public String run(WorkflowContext ctx) {
             for (ServerlessState state : serverlessWorkflow.getStates()) {
                 String name = state.getName();
-                ctx.run(name, () -> log.info("Executing state {}", name));
+                ctx.run(name, () -> {
+                    log.info("Executing state {}", name);
+                    Duration wait = state.getWait();
+                    if (wait != null && !wait.isZero()) {
+                        try {
+                            Thread.sleep(wait.toMillis());
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                });
             }
             return "completed";
         }
