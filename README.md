@@ -18,6 +18,8 @@ Workflows can currently execute the following simple tasks:
 - `set` &mdash; update workflow data with key/value pairs
 - `log` &mdash; write a message to the operator log
 - `fetch` &mdash; perform an HTTP GET and store the response
+- `post` &mdash; perform an HTTP POST and store the response
+- `unset` &mdash; remove variables from workflow data
 
 ## Building
 

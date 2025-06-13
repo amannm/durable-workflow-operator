@@ -78,8 +78,25 @@ public class RestateWorkflowRunner {
                             log.error("HTTP fetch failed", e);
                         }
                     }
+                    if (state.getPostUrl() != null && state.getPostVar() != null) {
+                        HttpClient http = HttpClient.newHttpClient();
+                        try {
+                            HttpRequest request = HttpRequest.newBuilder(URI.create(state.getPostUrl()))
+                                    .POST(HttpRequest.BodyPublishers.ofString(state.getPostBody() == null ? "" : state.getPostBody()))
+                                    .build();
+                            HttpResponse<String> resp = http.send(request, HttpResponse.BodyHandlers.ofString());
+                            data.put(state.getPostVar(), resp.body());
+                        } catch (Exception e) {
+                            log.error("HTTP post failed", e);
+                        }
+                    }
                     if (state.getSet() != null) {
                         data.putAll(state.getSet());
+                    }
+                    if (state.getUnset() != null) {
+                        for (String key : state.getUnset()) {
+                            data.remove(key);
+                        }
                     }
                 });
             }
