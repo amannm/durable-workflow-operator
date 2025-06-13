@@ -15,5 +15,6 @@ import io.fabric8.kubernetes.model.annotation.ShortNames;
 @Singular("workflow")
 @ShortNames("wf")
 public class Workflow extends CustomResource<WorkflowResourceSpec, WorkflowResourceStatus> {
+    private static final long serialVersionUID = 1L;
     // no additional fields
 }

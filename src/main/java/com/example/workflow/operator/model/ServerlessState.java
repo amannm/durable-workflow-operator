@@ -25,10 +25,17 @@ public class ServerlessState {
     }
 
     public Map<String, String> getSet() {
-        return set;
+        return set == null ? null : new java.util.HashMap<>(set);
     }
 
     public void setSet(Map<String, String> set) {
-        this.set = set;
+        this.set = set == null ? null : new java.util.HashMap<>(set);
+    }
+
+    ServerlessState copy() {
+        ServerlessState copy = new ServerlessState(name);
+        copy.wait = wait;
+        copy.set = getSet();
+        return copy;
     }
 }

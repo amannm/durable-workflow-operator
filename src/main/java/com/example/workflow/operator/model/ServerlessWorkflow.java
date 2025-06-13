@@ -25,6 +25,20 @@ public class ServerlessWorkflow {
     }
 
     public List<ServerlessState> getStates() {
-        return states;
+        return new ArrayList<>(states);
+    }
+
+    public void addState(ServerlessState state) {
+        states.add(state);
+    }
+
+    public ServerlessWorkflow copy() {
+        ServerlessWorkflow copy = new ServerlessWorkflow();
+        copy.id = id;
+        copy.version = version;
+        for (ServerlessState s : states) {
+            copy.states.add(s.copy());
+        }
+        return copy;
     }
 }
