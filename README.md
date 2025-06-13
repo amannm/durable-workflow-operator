@@ -8,6 +8,8 @@ This project combines the following technologies:
 
 into a system that accepts a workflow definition, deploys it on Kubernetes, starts executing the tasks while it uses the journaling capabilities of Restate to keep track of everything.
 
+An embedded Jetty server exposes an HTTP endpoint on port `8080`. Posting a workflow definition to `/workflows` creates a `Workflow` custom resource which triggers execution via the operator.
+
 ## Building
 
 This is a standard Maven project. To build it, run:
